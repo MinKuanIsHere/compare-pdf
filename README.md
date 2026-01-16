@@ -13,7 +13,7 @@ Offline, reproducible PDF comparison: extract paragraphs/images/tables → match
 - Threshold controls: text similarity uses difflib ratio (0–1, higher = stricter); image threshold is pHash Hamming distance (smaller = more similar).
 
 ## 🚀 Quick Start (Docker Compose)
-All services (API + frontend UI + existing CLI flow) start with one command.
+All services (API + frontend UI + existing CLI flow) start with one command (dev mode: uvicorn reload + Vite dev server).
 ```bash
 docker compose build
 docker compose up   # boots API and UI, mounts repo to /app/pdf_compare_dev
@@ -79,6 +79,7 @@ pdf_compare_dev/
 - Inline preview of annotated PDFs (A- and B-view).
 - Change list with color tags matching annotation palette; entries include page hints.
 - Direct downloads for originals, annotated PDFs, and reports (`download` attribute).
+- Upload validation: filename sanitization, size cap (`MAX_UPLOAD_BYTES`, default 50MB), simple PDF signature check.
 
 ## 🎨 Annotation Palette
 - Added (B-view): soft green (0.2, 0.8, 0.4), opacity 0.5
@@ -88,8 +89,3 @@ pdf_compare_dev/
 ## ⚙️ Threshold Notes
 - Text similarity: difflib ratio in [0,1]. Higher threshold = stricter matching; lower = more permissive.
 - Image similarity: pHash Hamming distance (integer). Lower distance = more similar; increase threshold to accept looser matches.
-
-## 🤝 Contributing
-- Use TDD: add/update tests around pipeline, API, and UI flows before changing behavior.
-- Keep CLI flow (`python main.py`) working alongside API/UI.
-- Prefer Docker Compose for local runs; outputs stay in `output/`.
