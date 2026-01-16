@@ -1,0 +1,28 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pdf-compare-api
+    working_dir: /app/pdf_compare_dev
+    volumes:
+      - .:/app/pdf_compare_dev
+    command: ["uvicorn", "api_server:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    ports:
+      - "8000:8000"
+    environment:
+      - OUTPUT_ROOT=/app/pdf_compare_dev/output
+
+  ui:
+    build:
+      context: ./frontend
+    container_name: pdf-compare-ui
+    working_dir: /app/frontend
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+    command: ["npm", "run", "dev", "--", "--host", "--port", "5173"]
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE=http://localhost:8000
